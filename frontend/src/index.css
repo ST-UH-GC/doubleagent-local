@@ -1,0 +1,140 @@
+@import 'tailwindcss';
+@plugin "daisyui";
+
+:root {
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.drawer-toggle {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.drawer-side .sidebar {
+  width: 16rem;
+  transition: width 200ms ease;
+}
+
+.drawer-toggle:not(:checked) ~ .drawer-side .sidebar {
+  width: 4rem;
+}
+
+.drawer-toggle:not(:checked) ~ .drawer-side .label-text {
+  display: none;
+}
+
+.drawer-toggle:checked ~ .drawer-side .label-text {
+  display: inline;
+}
+
+.drawer-side .icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  min-width: 2rem;
+  flex-shrink: 0;
+}
+
+.sidebar .icon svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.drawer-toggle:not(:checked) ~ .drawer-side .sidebar .menu li > button {
+  justify-content: center;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.drawer-toggle:not(:checked) ~ .drawer-side .sidebar .m-2 {
+  display: flex;
+  justify-content: center;
+}
+
+.fade-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 6rem; /* adjust fade size */
+  z-index: 20;
+
+  /* gradient from background color to transparent */
+  background: linear-gradient(
+    to bottom,
+    var(--b2),
+    /* DaisyUI base-200 background color */ rgba(0, 0, 0, 0) /* fully transparent */
+  );
+  pointer-events: none; /* don’t block scrolling or clicks */
+}
+/* Markdown styling */
+.markdown-content {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+.markdown-content h1,
+.markdown-content h2,
+.markdown-content h3 {
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  font-weight: bold;
+}
+
+.markdown-content h3 {
+  font-size: 1.25rem;
+}
+
+.markdown-content p {
+  margin-bottom: 1em;
+}
+
+.markdown-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1em 0;
+}
+
+.markdown-content th,
+.markdown-content td {
+  border: 1px solid currentColor;
+  padding: 0.5em 1em;
+  text-align: left;
+}
+
+.markdown-content th {
+  font-weight: bold;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.markdown-content ul,
+.markdown-content ol {
+  margin: 1em 0;
+  padding-left: 2em;
+}
+
+.markdown-content li {
+  margin-bottom: 0.5em;
+}
+
+.markdown-content hr {
+  margin: 2em 0;
+  border: none;
+  border-top: 1px solid currentColor;
+  opacity: 0.3;
+}
+
+.markdown-content code {
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 0.2em 0.4em;
+  border-radius: 4px;
+  font-family: monospace;
+}

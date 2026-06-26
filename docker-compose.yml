@@ -1,0 +1,35 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONUNBUFFERED=1 # Ensures real-time logging
+      - POETRY_VIRTUALENVS_CREATE=false # Tell the 'poetry run' command to NOT use a venv
+      - OLLAMA_BASE_URL=http://host.docker.internal:11434 # Reach Ollama running natively on Mac
+    env_file:
+      - ./backend/.env
+    volumes:
+      # Mounts the entire 'backend' directory into '/app'
+      # Any changes on your host are reflected in the container
+      - ./backend/app:/app/app
+
+    command: python -m app.dev
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_TARGET=http://backend:8000
+    depends_on:
+      - backend
+    # Add volumes for hot-reloading
+    volumes:
+      - ./frontend/src:/app/src # Mount source code
+
+    command: npm run dev

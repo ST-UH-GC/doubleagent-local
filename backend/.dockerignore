@@ -1,0 +1,32 @@
+# VCS
+.git
+.gitignore
+
+# Python caches
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Environments
+.env
+*.env
+.env.*
+.venv/
+venv/
+ENV/
+env/
+
+# Docker stuff
+Dockerfile
+docker-compose*.yml
+
+# Tests & docs
+# Tests are mounted in .dev container so it
+# does not matter that we ignore them here
+tests/
+docs/
+
+# OS files
+.DS_Store
+Thumbs.db

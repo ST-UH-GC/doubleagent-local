@@ -1,0 +1,25 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: db-migrate
+spec:
+  ttlSecondsAfterFinished: 300 # Clean up job after 5 minutes
+  template:
+    spec:
+      containers:
+        - name: migrate
+          image: docker.io/aappoarvid/double-agent-backend:latest
+          imagePullPolicy: Always
+          command:
+            - "alembic"
+            - "-c"
+            - "/app/app/db/alembic.ini" # <--- THIS IS THE CORRECT PATH FOR DOCKER CONTAINER
+            - "upgrade"
+            - "head"
+          env:
+            - name: DA_DB_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: double-agent-config
+                  key: DA_DB_URL
+      restartPolicy: OnFailure
