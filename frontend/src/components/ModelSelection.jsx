@@ -9,9 +9,7 @@ const ModelSelection = ({ selectedModel, setSelectedModel }) => {
         onChange={(e) => setSelectedModel(e.target.value)}
         className="select select-bordered"
       >
-        <option value="llama3.2">Llama 3.2</option>
-        <option value="qwen3:8b">Qwen 3 8B</option>
-        <option value="mistral">Mistral</option>
+        <option value="qwen3:14b">Qwen 3 14B</option>
       </select>
     </label>
   );

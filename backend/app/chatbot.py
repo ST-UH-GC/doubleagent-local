@@ -14,14 +14,14 @@ class ChatbotService:
     DEFAULT_SYSTEM_PROMPT = "You are a helpful assistant. Answer questions clearly."
 
     def __init__(self, system_prompt: str = DEFAULT_SYSTEM_PROMPT):
-        self.allowed_models = {"llama3.2", "llama3.1", "mistral", "gemma3"}
+        self.allowed_models = {"qwen3:14b"}
 
         self.model_name = None
         self.model = None
 
-        initial_model_name = os.getenv("DA_OLLAMA_MODEL", "llama3.2")
+        initial_model_name = os.getenv("DA_OLLAMA_MODEL", "qwen3:14b")
         if initial_model_name not in self.allowed_models:
-            initial_model_name = "llama3.2"
+            initial_model_name = "qwen3:14b"
 
         self._initialize_model(initial_model_name)
 
