@@ -68,6 +68,45 @@ h1, h2, h3 {
   border-radius: var(--da-radius) !important;
 }
 
+/* ─── Explicit button colour overrides (DaisyUI v5 specificity fix) ──────── */
+.btn-primary {
+  background-color: #1A5FA8 !important;
+  border-color: #1A5FA8 !important;
+  color: #ffffff !important;
+}
+.btn-primary:hover:not(:disabled) {
+  background-color: #155193 !important;
+  border-color: #155193 !important;
+}
+
+.btn-success {
+  background-color: #0E9E82 !important;
+  border-color: #0E9E82 !important;
+  color: #ffffff !important;
+}
+
+.btn-info {
+  background-color: #5BB8D4 !important;
+  border-color: #5BB8D4 !important;
+  color: #ffffff !important;
+}
+
+.btn-secondary {
+  background-color: #2272C3 !important;
+  border-color: #2272C3 !important;
+  color: #ffffff !important;
+}
+
+.btn-outline.btn-secondary {
+  background-color: transparent !important;
+  border-color: #2272C3 !important;
+  color: #2272C3 !important;
+}
+.btn-outline.btn-secondary:hover:not(:disabled) {
+  background-color: #2272C3 !important;
+  color: #ffffff !important;
+}
+
 /* ─── Sidebar collapse behaviour ─────────────────────────────────────────── */
 .drawer-toggle {
   position: absolute;

@@ -307,7 +307,7 @@ const Conversation = ({ onActivate }) => {
       }}
     >
       <div
-        className="chat-window w-full h-[80vh] mb-20 relative px-4 pb-56 sm:pb-24 overflow-hidden bg-white"
+        className="chat-window w-full h-[80vh] mb-20 relative px-4 pb-36 overflow-hidden bg-white"
         style={{ borderRadius: '8px', border: '1px solid rgba(26,95,168,0.2)', boxShadow: '0 2px 12px rgba(26,95,168,0.06)' }}
       >
         <div ref={messagesRef} className="messages-container overflow-y-auto h-full pr-2">
@@ -348,75 +348,81 @@ const Conversation = ({ onActivate }) => {
 
         <form
           onSubmit={handleSubmit}
-          className="flex flex-col sm:flex-row gap-2 p-4 w-full absolute bottom-0 left-0 rounded-b-[8px]"
+          className="flex flex-col gap-2 p-4 w-full absolute bottom-0 left-0 rounded-b-[8px]"
           style={{ backgroundColor: '#F4F7FA', borderTop: '1px solid rgba(26,95,168,0.12)' }}
           onFocus={onActivate}
         >
-          <ModelSelection selectedModel={selectedModel} setSelectedModel={setSelectedModel} />
-          <input
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Conversation starter..."
-            className="input input-bordered w-full"
-            disabled={isLoading}
-          />
-          <label className="input w-auto">
-            <span className="label">Turns: </span>
+          {/* Row 1: conversation starter + start/stop */}
+          <div className="flex gap-2">
             <input
-              type="number"
-              value={turns}
-              onChange={(e) => setTurns(Number(e.target.value))}
-              className="input input-bordered w-20 focus:outline-0"
-              min="1"
-              max="20"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="Conversation starter..."
+              className="input input-bordered w-full"
               disabled={isLoading}
             />
-          </label>
-          <button
-            type={isLoading ? 'button' : 'submit'}
-            className={`btn ${isLoading ? 'btn-error' : 'btn-primary'}`}
-            disabled={!isLoading && !input}
-            onClick={isLoading ? handleStopConversation : undefined}
-          >
-            {isLoading ? (
-              <>
-                <span className="loading loading-spinner loading-xs"></span>
-                STOP
-              </>
-            ) : (
-              'Start'
-            )}
-          </button>
-          {messages && !isLoading && (
-            <>
-              <button
-                type="button"
-                className={`btn ${isSaved ? 'btn-success' : 'btn-info'}`}
-                onClick={handleSaveConversation}
-                disabled={isSaving || isSaved}
-              >
-                {isSaving ? (
-                  <>
-                    <span className="loading loading-spinner loading-xs"></span>
-                    Saving...
-                  </>
-                ) : isSaved ? (
-                  '✓ Saved'
-                ) : (
-                  'Save'
-                )}
-              </button>
-              <button
-                type="button"
-                className="btn btn-outline btn-secondary"
-                onClick={() => handleClearConversation(true)}
-              >
-                Clear
-              </button>
+            <button
+              type={isLoading ? 'button' : 'submit'}
+              className={`btn shrink-0 ${isLoading ? 'btn-error' : 'btn-primary'}`}
+              disabled={!isLoading && !input}
+              onClick={isLoading ? handleStopConversation : undefined}
+            >
+              {isLoading ? (
+                <>
+                  <span className="loading loading-spinner loading-xs"></span>
+                  Stop
+                </>
+              ) : (
+                'Start'
+              )}
+            </button>
+          </div>
 
-              <DownloadChatButton threadId={threadId} label="Download conversation" />
-            </>
-          )}
+          {/* Row 2: model selector + turns + secondary actions */}
+          <div className="flex flex-wrap gap-2 items-center">
+            <ModelSelection selectedModel={selectedModel} setSelectedModel={setSelectedModel} />
+            <label className="input w-auto flex items-center gap-1 shrink-0">
+              <span className="label text-sm" style={{ color: '#6A8399' }}>Turns</span>
+              <input
+                type="number"
+                value={turns}
+                onChange={(e) => setTurns(Number(e.target.value))}
+                className="w-12 focus:outline-0 bg-transparent"
+                min="1"
+                max="20"
+                disabled={isLoading}
+              />
+            </label>
+            {messages && !isLoading && (
+              <>
+                <button
+                  type="button"
+                  className={`btn btn-sm ${isSaved ? 'btn-success' : 'btn-info'}`}
+                  onClick={handleSaveConversation}
+                  disabled={isSaving || isSaved}
+                >
+                  {isSaving ? (
+                    <>
+                      <span className="loading loading-spinner loading-xs"></span>
+                      Saving…
+                    </>
+                  ) : isSaved ? (
+                    '✓ Saved'
+                  ) : (
+                    'Save'
+                  )}
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-sm btn-outline btn-secondary"
+                  onClick={() => handleClearConversation(true)}
+                >
+                  Clear
+                </button>
+                <DownloadChatButton threadId={threadId} label="Download" />
+              </>
+            )}
+          </div>
         </form>
       </div>
     </div>
