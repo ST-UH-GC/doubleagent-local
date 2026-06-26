@@ -1,22 +1,30 @@
 const BotConfigurator = ({ title, prompt, agentName, onEditPrompt, onClearPrompt, onActivate }) => {
   return (
     <div
-      className="p-4 rounded-lg border bg-base-100 flex flex-col h-[50vh] lg:h-[70vh]"
+      className="p-5 bg-white flex flex-col h-[50vh] lg:h-[70vh]"
+      style={{ borderRadius: '8px', border: '1px solid rgba(26,95,168,0.2)', boxShadow: '0 2px 12px rgba(26,95,168,0.06)' }}
       onClick={(e) => {
         e.stopPropagation();
         onActivate();
       }}
     >
-      <h2 className="text-2xl font-bold mb-4 shrink-0 text-center tracking-wider">{title}</h2>
+      <h2
+        className="mb-4 shrink-0"
+        style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 700, fontSize: '15px', color: '#0E1E2E', letterSpacing: '-0.2px' }}
+      >
+        {title}
+      </h2>
 
-      <div className="mb-2 text-base-content/70 shrink-0">
-        <b>Current prompt:</b>
-        <h3 className="mt-2 ml-2">{agentName}</h3>
+      <div className="mb-2 shrink-0">
+        <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '10px', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '1.5px', color: '#6A8399' }}>
+          Current prompt
+        </span>
+        <p className="mt-1 ml-0 text-sm font-medium" style={{ color: '#0E1E2E' }}>{agentName}</p>
       </div>
 
       <div className="grow min-h-0 mb-4">
-        <div className="h-full overflow-y-auto whitespace-pre-wrap p-2">
-          <p className="italic text-pretty tracking-wide opacity-80 text-sm">
+        <div className="h-full overflow-y-auto whitespace-pre-wrap p-2" style={{ borderTop: '1px solid rgba(26,95,168,0.08)' }}>
+          <p className="text-pretty text-sm leading-relaxed" style={{ color: '#2C4256' }}>
             {prompt || 'No prompt set'}
           </p>
         </div>

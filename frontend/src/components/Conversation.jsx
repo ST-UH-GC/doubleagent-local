@@ -306,9 +306,12 @@ const Conversation = ({ onActivate }) => {
         onActivate();
       }}
     >
-      <div className="chat-window w-full h-[80vh] mb-20 relative border rounded-xl px-4 pb-56 sm:pb-24 overflow-hidden">
+      <div
+        className="chat-window w-full h-[80vh] mb-20 relative px-4 pb-56 sm:pb-24 overflow-hidden bg-white"
+        style={{ borderRadius: '8px', border: '1px solid rgba(26,95,168,0.2)', boxShadow: '0 2px 12px rgba(26,95,168,0.06)' }}
+      >
         <div ref={messagesRef} className="messages-container overflow-y-auto h-full pr-2">
-          <div className="absolute top-0 left-0 w-full h-16 pointer-events-none z-20 bg-linear-to-b from-base-200 to-[rgba(243,244,246,0)]"></div>
+          <div className="absolute top-0 left-0 w-full h-16 pointer-events-none z-20" style={{ background: 'linear-gradient(to bottom, #ffffff, rgba(255,255,255,0))' }}></div>
 
           {!messages && <p className="mt-10">Type a message to start...</p>}
 
@@ -325,7 +328,7 @@ const Conversation = ({ onActivate }) => {
                 }`}
               >
                 <div
-                  className={`chat-bubble text-pretty tracking-wide ${msg.chatbot === 'user' && 'chat-bubble-accent'}`}
+                  className={`chat-bubble text-pretty tracking-wide ${msg.chatbot === 'user' && 'chat-bubble-primary'}`}
                 >
                   <strong>
                     {msg.chatbot === 'user' ? 'You' : `Chatbot ${msg.chatbot.toUpperCase()}`}:
@@ -345,7 +348,8 @@ const Conversation = ({ onActivate }) => {
 
         <form
           onSubmit={handleSubmit}
-          className="flex flex-col sm:flex-row gap-2 p-4 w-full absolute bottom-0 left-0 bg-base-200 border-t rounded-b-xl"
+          className="flex flex-col sm:flex-row gap-2 p-4 w-full absolute bottom-0 left-0 rounded-b-[8px]"
+          style={{ backgroundColor: '#F4F7FA', borderTop: '1px solid rgba(26,95,168,0.12)' }}
           onFocus={onActivate}
         >
           <ModelSelection selectedModel={selectedModel} setSelectedModel={setSelectedModel} />

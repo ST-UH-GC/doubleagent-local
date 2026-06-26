@@ -1,13 +1,74 @@
 @import 'tailwindcss';
 @plugin "daisyui";
 
+/* ─── Nuuski colour palette ───────────────────────────────────────────────── */
 :root {
+  --da-blue:        #1A5FA8;
+  --da-blue-mid:    #2272C3;
+  --da-blue-light:  #5BB8D4;
+  --da-blue-pale:   #EBF2F8;
+  --da-blue-paler:  #F4F7FA;
+  --da-teal:        #0E9E82;
+  --da-ink:         #0E1E2E;
+  --da-ink-mid:     #2C4256;
+  --da-ink-dim:     #6A8399;
+  --da-border:      rgba(26, 95, 168, 0.12);
+  --da-border-mid:  rgba(26, 95, 168, 0.2);
+  --da-radius:      3px;
+  --da-radius-lg:   8px;
+
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* ─── Override DaisyUI light theme with Nuuski tokens ─────────────────────── */
+[data-theme="light"] {
+  --color-primary:          #1A5FA8;
+  --color-primary-content:  #ffffff;
+  --color-secondary:        #2272C3;
+  --color-secondary-content: #ffffff;
+  --color-accent:           #5BB8D4;
+  --color-accent-content:   #ffffff;
+  --color-neutral:          #0E1E2E;
+  --color-neutral-content:  #ffffff;
+  --color-base-100:         #ffffff;
+  --color-base-200:         #F4F7FA;
+  --color-base-300:         #EBF2F8;
+  --color-base-content:     #0E1E2E;
+  --color-success:          #0E9E82;
+  --color-success-content:  #ffffff;
+  --color-warning:          #f0a500;
+  --color-warning-content:  #ffffff;
+  --color-error:            #d9534f;
+  --color-error-content:    #ffffff;
+  --color-info:             #5BB8D4;
+  --color-info-content:     #ffffff;
+}
+
+/* ─── Typography ──────────────────────────────────────────────────────────── */
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 400;
+  color: var(--da-ink);
+  background-color: var(--da-blue-paler);
+}
+
+h1, h2, h3 {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+}
+
+/* ─── Global radius override (Nuuski uses 3px buttons, 8px cards) ─────────── */
+.btn {
+  border-radius: var(--da-radius) !important;
+}
+
+.input, .select, .textarea {
+  border-radius: var(--da-radius) !important;
+}
+
+/* ─── Sidebar collapse behaviour ─────────────────────────────────────────── */
 .drawer-toggle {
   position: absolute;
   opacity: 0;
@@ -57,23 +118,57 @@
   justify-content: center;
 }
 
+/* ─── Fade-top overlay for chat scroll area ───────────────────────────────── */
 .fade-top {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: 6rem; /* adjust fade size */
+  height: 6rem;
   z-index: 20;
-
-  /* gradient from background color to transparent */
-  background: linear-gradient(
-    to bottom,
-    var(--b2),
-    /* DaisyUI base-200 background color */ rgba(0, 0, 0, 0) /* fully transparent */
-  );
-  pointer-events: none; /* don’t block scrolling or clicks */
+  background: linear-gradient(to bottom, var(--da-blue-paler), rgba(244, 247, 250, 0));
+  pointer-events: none;
 }
-/* Markdown styling */
+
+/* ─── Sidebar — dark ink panel ────────────────────────────────────────────── */
+.sidebar {
+  background-color: var(--da-ink) !important;
+}
+
+.sidebar .menu li > button {
+  color: rgba(255, 255, 255, 0.65);
+  transition: color 150ms ease, background-color 150ms ease;
+}
+
+.sidebar .menu li > button:hover {
+  background-color: rgba(255, 255, 255, 0.07);
+  color: #ffffff;
+}
+
+.sidebar .divider {
+  color: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.sidebar .chat-history-btn {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.sidebar .chat-history-btn:hover {
+  background-color: rgba(255, 255, 255, 0.07);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.sidebar .sidebar-toggle-btn {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.sidebar .sidebar-toggle-btn:hover {
+  background-color: rgba(255, 255, 255, 0.07);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* ─── Markdown content (modals) ───────────────────────────────────────────── */
 .markdown-content {
   padding: 20px;
   max-width: 800px;
@@ -112,7 +207,7 @@
 
 .markdown-content th {
   font-weight: bold;
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(26, 95, 168, 0.06);
 }
 
 .markdown-content ul,
@@ -133,8 +228,8 @@
 }
 
 .markdown-content code {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(26, 95, 168, 0.08);
   padding: 0.2em 0.4em;
-  border-radius: 4px;
+  border-radius: 3px;
   font-family: monospace;
 }

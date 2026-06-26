@@ -63,7 +63,7 @@ const HomePage = () => {
       />
       <div className="drawer-content flex flex-col min-h-screen">
         <main
-          className="p-8 grow"
+          className="p-6 grow"
           onClick={() => {
             setIsConvoActive(false);
             const drawer = document.getElementById('my-drawer-4');
@@ -73,10 +73,15 @@ const HomePage = () => {
           }}
         >
           <HamburgerMenu />
-          <h1 className="text-center text-4xl font-bold mb-8 tracking-widest">Double Agent AI</h1>
+          <h1
+            className="text-center mb-6 tracking-tight"
+            style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 800, fontSize: 'clamp(24px, 3vw, 36px)', color: '#0E1E2E', letterSpacing: '-0.5px' }}
+          >
+            Double Agent AI
+          </h1>
           <div
-            className={`grid grid-cols-1 gap-6 transition-all duration-300 ${
-              isConvoActive ? 'lg:grid-cols-[1fr_6fr_1fr]' : 'lg:grid-cols-[1fr_1.9fr_1fr]'
+            className={`grid grid-cols-1 gap-4 transition-all duration-300 ${
+              isConvoActive ? 'lg:grid-cols-[280px_1fr_280px]' : 'lg:grid-cols-[1fr_2fr_1fr]'
             }`}
           >
             <BotConfigurator

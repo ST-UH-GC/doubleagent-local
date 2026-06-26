@@ -1,5 +1,4 @@
 import { useChatSession } from '../contexts/ChatSessionContext';
-import ThemeToggle from './ThemeToggle';
 
 const Menu = ({ onOpenUserGuide }) => {
   const { conversationList, isLoadingConversationList, openChat, startNewChat } = useChatSession();
@@ -10,8 +9,14 @@ const Menu = ({ onOpenUserGuide }) => {
   };
 
   return (
-    <div className="bg-base-200 flex flex-col justify-between min-h-full sidebar p-2">
+    <div className="flex flex-col justify-between min-h-full sidebar p-2">
       <div>
+        <div
+          className="label-text px-3 py-3 mb-1 block"
+          style={{ fontFamily: 'Inter, sans-serif', fontWeight: 700, fontSize: '13px', color: '#5BB8D4', letterSpacing: '-0.2px', whiteSpace: 'nowrap' }}
+        >
+          Double Agent AI
+        </div>
         <ul className="menu w-full space-y-1">
           <li>
             <button
@@ -84,7 +89,7 @@ const Menu = ({ onOpenUserGuide }) => {
                 return (
                   <button
                     key={c.id}
-                    className="btn btn-ghost btn-sm w-full justify-start text-left normal-case font-normal hover:bg-base-300 active:bg-base-300 rounded-lg p-3 h-auto min-h-12"
+                    className="chat-history-btn btn btn-ghost btn-sm w-full justify-start text-left normal-case font-normal rounded-lg p-3 h-auto min-h-12"
                     onClick={() => openChat(c)}
                   >
                     <span className="whitespace-normal wrap-break-word text-xs leading-tight line-clamp-2 overflow-hidden text-ellipsis">
@@ -99,12 +104,10 @@ const Menu = ({ onOpenUserGuide }) => {
       </div>
 
       <div className="m-2 flex flex-col items-end gap-2">
-        <ThemeToggle />
-
         <button
           onClick={toggleDrawer}
           aria-label="Toggle sidebar"
-          className="btn btn-ghost btn-circle btn-sm flex items-center justify-center"
+          className="sidebar-toggle-btn btn btn-ghost btn-circle btn-sm flex items-center justify-center"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
