@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const DownloadChatButton = ({ threadId = 'default', label = 'Download .txt' }) => {
+const DownloadChatButton = ({ threadId = 'default', label = 'Download .txt', disabled = false }) => {
   const handleDownload = async () => {
     try {
       const response = await axios.get(`api/download-chat/${threadId}`, {
@@ -32,6 +32,7 @@ const DownloadChatButton = ({ threadId = 'default', label = 'Download .txt' }) =
       type="button"
       onClick={handleDownload}
       className="btn btn-primary btn-sm gap-2"
+      disabled={disabled}
       title="Download conversation as text"
       aria-label={`Download conversation ${threadId}`}
     >

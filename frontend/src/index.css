@@ -107,6 +107,26 @@ h1, h2, h3 {
   color: #ffffff !important;
 }
 
+/* ─── Input / select colour fixes (DaisyUI v5 specificity) ───────────────── */
+.input,
+.input-bordered,
+.select,
+.select-bordered {
+  background-color: #ffffff !important;
+  color: #0E1E2E !important;
+  border-color: rgba(26, 95, 168, 0.25) !important;
+}
+
+.input::placeholder {
+  color: #6A8399 !important;
+}
+
+.input:focus,
+.select:focus {
+  border-color: #1A5FA8 !important;
+  outline-color: rgba(26, 95, 168, 0.2) !important;
+}
+
 /* ─── Sidebar collapse behaviour ─────────────────────────────────────────── */
 .drawer-toggle {
   position: absolute;

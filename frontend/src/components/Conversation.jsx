@@ -378,50 +378,48 @@ const Conversation = ({ onActivate }) => {
             </button>
           </div>
 
-          {/* Row 2: model selector + turns + secondary actions */}
+          {/* Row 2: model selector + turns + secondary actions (always visible) */}
           <div className="flex flex-wrap gap-2 items-center">
             <ModelSelection selectedModel={selectedModel} setSelectedModel={setSelectedModel} />
-            <label className="input w-auto flex items-center gap-1 shrink-0">
-              <span className="label text-sm" style={{ color: '#6A8399' }}>Turns</span>
+            <label className="input input-bordered flex items-center gap-2 w-auto shrink-0">
+              <span className="text-sm" style={{ color: '#6A8399' }}>Turns</span>
               <input
                 type="number"
                 value={turns}
                 onChange={(e) => setTurns(Number(e.target.value))}
-                className="w-12 focus:outline-0 bg-transparent"
+                className="w-10 focus:outline-0 bg-transparent"
+                style={{ color: '#0E1E2E' }}
                 min="1"
                 max="20"
                 disabled={isLoading}
               />
             </label>
-            {messages && !isLoading && (
-              <>
-                <button
-                  type="button"
-                  className={`btn btn-sm ${isSaved ? 'btn-success' : 'btn-info'}`}
-                  onClick={handleSaveConversation}
-                  disabled={isSaving || isSaved}
-                >
-                  {isSaving ? (
-                    <>
-                      <span className="loading loading-spinner loading-xs"></span>
-                      Saving…
-                    </>
-                  ) : isSaved ? (
-                    '✓ Saved'
-                  ) : (
-                    'Save'
-                  )}
-                </button>
-                <button
-                  type="button"
-                  className="btn btn-sm btn-outline btn-secondary"
-                  onClick={() => handleClearConversation(true)}
-                >
-                  Clear
-                </button>
-                <DownloadChatButton threadId={threadId} label="Download" />
-              </>
-            )}
+            <button
+              type="button"
+              className={`btn btn-sm ${isSaved ? 'btn-success' : 'btn-info'}`}
+              onClick={handleSaveConversation}
+              disabled={!messages || isLoading || isSaving || isSaved}
+            >
+              {isSaving ? (
+                <>
+                  <span className="loading loading-spinner loading-xs"></span>
+                  Saving…
+                </>
+              ) : isSaved ? (
+                '✓ Saved'
+              ) : (
+                'Save'
+              )}
+            </button>
+            <button
+              type="button"
+              className="btn btn-sm btn-outline btn-secondary"
+              onClick={() => handleClearConversation(true)}
+              disabled={!messages || isLoading}
+            >
+              Clear
+            </button>
+            <DownloadChatButton threadId={threadId} label="Download conversation" disabled={!messages} />
           </div>
         </form>
       </div>
