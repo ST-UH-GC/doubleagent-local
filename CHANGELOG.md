@@ -55,6 +55,45 @@ DoubleAgent was a fully working OHTU student project. After the project ended, t
 
 ---
 
+## 2026-06-26 — Single-branch provider refactor + prompt save fix
+
+### Problem
+The two-branch approach (separate `main` and `anthropic-api` branches with different Python dependencies) was fragile. If Docker was built on one branch and the source code was switched to the other without rebuilding, the backend crashed on startup with `ModuleNotFoundError`. This caused the prompt save modal to hang with a spinner indefinitely.
+
+### Solution: one branch, one image, provider via env var
+
+**`backend/pyproject.toml`**
+- Both `langchain-ollama` and `langchain-anthropic` now installed in the same Docker image
+
+**`backend/app/chatbot.py`**
+- Reads `DA_PROVIDER=ollama|anthropic` at startup
+- Conditionally imports `ChatOllama` or `ChatAnthropic` based on the env var
+- Model list and default model also vary by provider
+- No more possibility of import error on mode switch
+
+**`docker-compose.yml`**
+- `DA_PROVIDER=ollama` (backend) and `VITE_PROVIDER=ollama` (frontend) set explicitly
+- `switch.sh` uses `sed` to update these two lines in-place — no git operations
+
+**`frontend/src/components/ModelSelection.jsx`**
+- Reads `import.meta.env.VITE_PROVIDER` at build time
+- Shows Ollama models or Claude models accordingly
+
+**`switch.sh`**
+- Rewired: swaps provider via `sed` on `docker-compose.yml`, then rebuilds
+- No longer does `git checkout` — branch switching is eliminated entirely
+
+**`anthropic-api` branch**
+- Deleted (no longer needed; `main` handles both modes)
+
+**Desktop shortcuts**
+- Simplified to just call `./switch.sh ollama` or `./switch.sh claude`
+
+### Prompt saving
+The hang was caused by the backend crash, not a frontend bug. `PromptManagerModal.jsx` correctly handles all error states. With a stable backend the save flow works as expected.
+
+---
+
 ### File map of changes from original OHTU project
 
 | File | Change |
