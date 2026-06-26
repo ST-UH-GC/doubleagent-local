@@ -1,3 +1,15 @@
+const MODELS = {
+  ollama: [{ value: 'qwen3:14b', label: 'Qwen 3 14B' }],
+  anthropic: [
+    { value: 'claude-sonnet-4-5', label: 'Claude Sonnet (recommended)' },
+    { value: 'claude-haiku-4-5', label: 'Claude Haiku (fast)' },
+    { value: 'claude-opus-4-5', label: 'Claude Opus (powerful)' },
+  ],
+};
+
+const provider = import.meta.env.VITE_PROVIDER || 'ollama';
+const models = MODELS[provider] ?? MODELS.ollama;
+
 const ModelSelection = ({ selectedModel, setSelectedModel }) => {
   return (
     <label className="select form-control">
@@ -9,7 +21,11 @@ const ModelSelection = ({ selectedModel, setSelectedModel }) => {
         onChange={(e) => setSelectedModel(e.target.value)}
         className="select select-bordered"
       >
-        <option value="qwen3:14b">Qwen 3 14B</option>
+        {models.map((m) => (
+          <option key={m.value} value={m.value}>
+            {m.label}
+          </option>
+        ))}
       </select>
     </label>
   );

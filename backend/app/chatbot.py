@@ -1,35 +1,42 @@
 import os
 from dotenv import load_dotenv
-from langchain_ollama import ChatOllama
 from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.graph import START, MessagesState, StateGraph
 
-# Load environment variables
 load_dotenv()
+
+DA_PROVIDER = os.getenv("DA_PROVIDER", "ollama").lower()
+
+if DA_PROVIDER == "anthropic":
+    from langchain_anthropic import ChatAnthropic
+else:
+    from langchain_ollama import ChatOllama
 
 
 class ChatbotService:
     DEFAULT_SYSTEM_PROMPT = "You are a helpful assistant. Answer questions clearly."
 
     def __init__(self, system_prompt: str = DEFAULT_SYSTEM_PROMPT):
-        self.allowed_models = {"qwen3:14b"}
+        if DA_PROVIDER == "anthropic":
+            self.allowed_models = {"claude-sonnet-4-5", "claude-opus-4-5", "claude-haiku-4-5"}
+            default_model = os.getenv("DA_MODEL", "claude-sonnet-4-5")
+        else:
+            self.allowed_models = {"qwen3:14b"}
+            default_model = os.getenv("DA_MODEL", "qwen3:14b")
+
+        if default_model not in self.allowed_models:
+            default_model = next(iter(self.allowed_models))
 
         self.model_name = None
         self.model = None
-
-        initial_model_name = os.getenv("DA_OLLAMA_MODEL", "qwen3:14b")
-        if initial_model_name not in self.allowed_models:
-            initial_model_name = "qwen3:14b"
-
-        self._initialize_model(initial_model_name)
+        self._initialize_model(default_model)
 
         self.workflow = StateGraph(state_schema=MessagesState)
         self.workflow.add_edge(START, "model")
         self.workflow.add_node("model", self._call_model)
 
-        # Add memory
         self.memory = MemorySaver()
         self.app = self.workflow.compile(checkpointer=self.memory)
 
@@ -38,19 +45,25 @@ class ChatbotService:
         self.set_system_prompt(system_prompt)
 
     def _initialize_model(self, model_name: str):
-        """Initialize or update the ChatOllama model."""
+        """Initialize or update the LLM based on the configured provider."""
         is_update = self.model_name is not None
-
         self.model_name = model_name
-        self.model = ChatOllama(
-            model=self.model_name,
-            base_url=os.getenv("OLLAMA_BASE_URL", "http://localhost:11434"),
-            temperature=1.0,
-        )
-        if is_update:
-            print(f"[ChatbotService] 🔄 Model updated to: {self.model_name}")
+
+        if DA_PROVIDER == "anthropic":
+            self.model = ChatAnthropic(
+                model=self.model_name,
+                api_key=os.getenv("ANTHROPIC_API_KEY"),
+                temperature=1.0,
+            )
         else:
-            print(f"[ChatbotService] ✅ Model initialized: {self.model_name}")
+            self.model = ChatOllama(
+                model=self.model_name,
+                base_url=os.getenv("OLLAMA_BASE_URL", "http://localhost:11434"),
+                temperature=1.0,
+            )
+
+        action = "updated" if is_update else "initialized"
+        print(f"[ChatbotService] ✅ Model {action}: {self.model_name} (provider: {DA_PROVIDER})")
 
     def _call_model(self, state: MessagesState):
         prompt = self.prompt_template.invoke(state)
@@ -87,12 +100,8 @@ class ChatbotService:
                 self.set_system_prompt(system_prompt)
 
             config = {"configurable": {"thread_id": thread_id}}
-            input_messages = [HumanMessage(content=message)]
-
-            output = self.app.invoke({"messages": input_messages}, config)
-            ai_response = output["messages"][-1]
-
-            return ai_response.content
+            output = self.app.invoke({"messages": [HumanMessage(content=message)]}, config)
+            return output["messages"][-1].content
 
         except Exception as e:
             return f"Error: {str(e)}"
@@ -104,10 +113,8 @@ class ChatbotService:
             self.set_model(model)
         try:
             config = {"configurable": {"thread_id": thread_id}}
-            input_messages = [HumanMessage(content=message)]
-
             async for chunk, metadata in self.app.astream(
-                {"messages": input_messages}, config, stream_mode="messages"
+                {"messages": [HumanMessage(content=message)]}, config, stream_mode="messages"
             ):
                 if isinstance(chunk, AIMessage):
                     yield chunk.content
@@ -118,20 +125,18 @@ class ChatbotService:
     def get_conversation_history(self, thread_id: str):
         config = {"configurable": {"thread_id": thread_id}}
         state = self.app.get_state(config)
-
         messages = state.values.get("messages", [])
         conversation_text = ""
 
         for message in messages:
-            role = "Unk"
-
             if isinstance(message, HumanMessage):
                 role = "Bot B"
             elif isinstance(message, AIMessage):
                 role = "Bot A"
             elif isinstance(message, SystemMessage):
                 continue
-
+            else:
+                role = "Unknown"
             conversation_text += f"{role}:\n{message.content}\n\n"
 
         return conversation_text
