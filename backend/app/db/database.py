@@ -7,7 +7,7 @@ from sqlalchemy.orm import sessionmaker
 load_dotenv()
 
 # Defaults to a local SQLite file — no setup required
-DATABASE_URL = os.getenv("DA_DB_URL", "sqlite:///./doubleagent.db")
+DATABASE_URL = os.getenv("DA_DB_URL", "sqlite:///./data/doubleagent.db")
 
 engine = create_engine(
     DATABASE_URL,
