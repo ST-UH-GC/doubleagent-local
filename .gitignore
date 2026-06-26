@@ -28,6 +28,9 @@ dist-ssr
 venv
 __pycache__
 
+# Database (must not be tracked — branch switches would overwrite it)
+backend/data/
+
 # Secrets
 .env
 .env.local
