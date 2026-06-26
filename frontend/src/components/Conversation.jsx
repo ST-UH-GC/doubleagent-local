@@ -5,6 +5,9 @@ import { useBotConfig } from '../contexts/BotConfigContext';
 import { useChatSession } from '../contexts/ChatSessionContext';
 import axios from 'axios';
 
+const DEFAULT_MODEL =
+  import.meta.env.VITE_PROVIDER === 'anthropic' ? 'claude-sonnet-4-5' : 'qwen3:14b';
+
 const Conversation = ({ onActivate }) => {
   const { promptA, promptB, setPromptA, setPromptB, initPrompt } = useBotConfig();
 
@@ -14,7 +17,7 @@ const Conversation = ({ onActivate }) => {
   const [messages, setMessages] = useState(null);
   const messagesRef = useRef(null);
   const [turns, setTurns] = useState(3);
-  const [selectedModel, setSelectedModel] = useState('gpt-4o');
+  const [selectedModel, setSelectedModel] = useState(DEFAULT_MODEL);
   const [threadId, setThreadId] = useState(crypto.randomUUID());
 
   const [isLoading, setIsLoading] = useState(false);
@@ -44,7 +47,7 @@ const Conversation = ({ onActivate }) => {
       if (!activeConversationId) {
         setMessages(null);
         setThreadId(crypto.randomUUID());
-        setSelectedModel('gpt-4o');
+        setSelectedModel(DEFAULT_MODEL);
         setTurns(3);
         setIsSaved(false);
         savedMessageCountRef.current = null;
